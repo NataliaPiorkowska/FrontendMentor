@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { ApiService } from '../../../services/api-service.service';
 import { Advice } from '../../domain/advice';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-advice-card',
   standalone: true,
-  imports: [AdviceCardComponent],
+  imports: [AdviceCardComponent,CommonModule],
   templateUrl: './advice-card.component.html',
   styleUrl: './advice-card.component.scss'
 })
