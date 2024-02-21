@@ -1,5 +1,18 @@
 <div class="container">
   <title>Frontend Mentor | Advice generator app</title>
 
-  <app-advice-card></app-advice-card>
+  <app-advice-card [element]="adviceElement"></app-advice-card>
+  <button
+    type="button"
+    class="btn btn-circle"
+    style="background-color: #52ffa8"
+    (click)="onAdviceGenerated()"
+  >
+    <img
+      src="../assets/images/icon-dice.svg"
+      alt="Dice Icon"
+      width="24"
+      height="24"
+    />
+  </button>
 </div>

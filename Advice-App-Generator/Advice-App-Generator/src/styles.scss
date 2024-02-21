@@ -2,14 +2,18 @@
 
 body {
   background-color: hsl(217.89deg 23.46% 15.88%);
+  margin: 0; /* Reset default margin */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Set minimum height to ensure the footer sticks to the bottom */
 }
 
 .attribution {
   font-size: 11px;
   text-align: center;
-  color:white
-}
-
-footer {
-  display: block;
+  color: white;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 10px 0; /* Add padding for better appearance */
 }

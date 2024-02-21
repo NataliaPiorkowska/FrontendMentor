@@ -1,21 +1,25 @@
 <div
-  *ngIf="advice.slip"
+  *ngIf="element.slip"
   class="container custom-container"
   style="background-color: #323a49"
 >
-  <p class="text-neon">ADVICE #{{ advice.slip.id }}</p>
-  <p class="text-advice">{{ advice.slip.advice }}</p>
-  <button
-    type="button"
-    class="btn btn-circle"
-    style="background-color: #52ffa8"
-    (click)="reloadAdvice()"
-  >
-    <img
-      src="../assets/images/icon-dice.svg"
-      alt="Dice Icon"
-      width="24"
-      height="24"
-    />
-  </button>
+  <div class="row align-items-start">
+    <div class="col">
+      <h1 class="text-neon fs-6 fw-bolder">ADVICE #{{ element.slip.id }}</h1>
+    </div>
+  </div>
+  <div class="row align-items-center">
+    <div class="col">
+      <p class="text-advice fs-5 fw-bold">{{ element.slip.advice }}</p>
+    </div>
+  </div>
+  <div class="row align-items-center">
+    <div class="col">
+  <picture class="text-center mb-5 pt-3 pb-4">
+    <source srcset="../../../assets/images/pattern-divider-desktop.svg" media="(min-width: 900px)">
+    <img class="w-100" src="../../../assets/images/pattern-divider-mobile.svg" alt="">
+</picture>
+</div>
+</div>
+
 </div>
