@@ -1,25 +1,43 @@
-<div
-  *ngIf="element.slip"
-  class="container custom-container"
-  style="background-color: #323a49"
->
+<div class="container custom-container" style="background-color: #323a49">
   <div class="row align-items-start">
     <div class="col">
-      <h1 class="text-neon fs-6 fw-bolder">ADVICE #{{ element.slip.id }}</h1>
+      <h1 class="text-neon fs-3 fw-bolder">
+        <span>ADVICE</span
+        ><span *ngIf="element.slip.advice != ''"> #{{ element.slip!.id }}</span>
+      </h1>
     </div>
   </div>
-  <div class="row align-items-center">
-    <div class="col">
+  <div
+    class="row align-items-center"
+    *ngIf="!element.slip || !element.slip.advice"
+  >
+    <div class="col-md-12 advice-container">
+      <p class="text-advice fs-5 fw-bold">
+        Press the button to generate advice.
+      </p>
+    </div>
+  </div>
+  <div
+    class="row align-items-center"
+    *ngIf="element.slip && element.slip.advice"
+  >
+    <div class="col-md-12 advice-container">
       <p class="text-advice fs-5 fw-bold">{{ element.slip.advice }}</p>
     </div>
   </div>
   <div class="row align-items-center">
     <div class="col">
-  <picture class="text-center mb-5 pt-3 pb-4">
-    <source srcset="../../../assets/images/pattern-divider-desktop.svg" media="(min-width: 900px)">
-    <img class="w-100" src="../../../assets/images/pattern-divider-mobile.svg" alt="">
-</picture>
-</div>
-</div>
-
+      <picture class="text-center mb-5 pt-3 pb-4">
+        <source
+          srcset="../../../assets/images/pattern-divider-desktop.svg"
+          media="(min-width: 900px)"
+        />
+        <img
+          class="w-100"
+          src="../../../assets/images/pattern-divider-mobile.svg"
+          alt=""
+        />
+      </picture>
+    </div>
+  </div>
 </div>

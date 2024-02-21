@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { ApiService } from '../../../services/api-service.service';
 import { Advice } from '../../domain/advice';
 import { CommonModule } from '@angular/common';
 
