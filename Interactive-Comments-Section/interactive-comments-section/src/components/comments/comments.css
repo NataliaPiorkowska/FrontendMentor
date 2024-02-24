@@ -1,4 +1,13 @@
 .custom-card-container {
-    width: 65rem; 
+    width: 200rem; 
     margin: 0 auto;
-  }
+}
+
+#plusButton {
+    float:left; 
+ }
+ 
+ #belowButtons{
+    float:left; 
+    clear: left;
+ }

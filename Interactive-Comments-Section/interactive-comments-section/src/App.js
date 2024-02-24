@@ -1,6 +1,6 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import MojaKomponent from "./components/comments/comments";
+import CommentsComponent from "./components/comments/comments";
 
 function App() {
   return (
@@ -11,9 +11,8 @@ function App() {
         justifyContent: "center",
       }}
     >
-    <MojaKomponent />
+    <CommentsComponent />
     </div>
   );
 }
-
 export default App;
