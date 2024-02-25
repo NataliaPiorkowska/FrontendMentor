@@ -1,5 +1,4 @@
 import "./App.css";
-import "bootstrap/dist/css/bootstrap.min.css";
 import CommentsComponent from "./components/comments/comments";
 
 function App() {
@@ -9,6 +8,7 @@ function App() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        backgroundColor:"#f5f6fa"
       }}
     >
     <CommentsComponent />
