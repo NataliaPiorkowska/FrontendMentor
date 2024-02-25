@@ -8,6 +8,7 @@ function App() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        backgroundColor:"#f5f6fa"
       }}
     >
     <CommentsComponent />

@@ -1,16 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./comments.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import amyRobsonImage from "../../assets/avatars/image-amyrobson.png";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function CommentsComponent() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 576);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <div className="container">
       <div className="row">
         <div className="col-xs-12 col-sm-8 col-md-10 col-lg-14">
           <div className="card">
-            <div className="card-body">
+            <div className="card-body" style={{ position: "relative" }}>
               <div
                 className="d-flex align-items-start align-items-md-center 
                flex-column-reverse  flex-md-row "
@@ -63,7 +74,14 @@ function CommentsComponent() {
                       />
                       <span className="fw-bold">Amy Robson</span> 1 month ago
                     </div>
-                    <div style={{ color: "#5357b6" }}>
+                    <div
+                      style={{
+                        color: "#5357b6",
+                        position: "absolute",
+                        top: isMobile ? "184px" : "17px",
+                        right: "39px",
+                      }}
+                    >
                       <i className="bi bi-reply-fill "></i>
                       <span className="fw-bold">Reply</span>
                     </div>
