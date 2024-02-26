@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "./comments.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import amyRobsonImage from "../../assets/avatars/image-amyrobson.png";
 import "bootstrap/dist/css/bootstrap.min.css";
+import data from "../../assets/data.json";
+import DataComments from "../../domain/comments.ts";
 
 function CommentsComponent() {
   const [isMobile, setIsMobile] = useState(false);
+  const [commentsData, setCommentsData] = useState();
 
   useEffect(() => {
     const handleResize = () => {
@@ -14,6 +16,15 @@ function CommentsComponent() {
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (isValidData(data)) {
+      setCommentsData(data);
+      console.log(data);
+    } else {
+      console.error("Invalid data structure in data.json");
+    }
   }, []);
 
   return (
@@ -26,7 +37,7 @@ function CommentsComponent() {
                 className="d-flex align-items-start align-items-md-center 
                flex-column-reverse  flex-md-row "
               >
-                <div className="d-flex flex-md-column">
+                <div className="d-flex flex-md-column ms-3">
                   <button
                     type="button"
                     className="btn btn-outline-secondary d-flex align-items-center"
@@ -45,8 +56,11 @@ function CommentsComponent() {
                     type="button"
                     className="btn btn-outline-secondary d-flex align-items-center"
                     style={{ height: "30px" }}
+                    disabled
                   >
-                    8
+                    {commentsData && (
+                      <span>{commentsData.comments[0].score}</span>
+                    )}
                   </button>
                   <button
                     type="button"
@@ -65,20 +79,31 @@ function CommentsComponent() {
                 </div>
                 <div className="flex-grow-1" style={{ paddingLeft: "10px" }}>
                   <div className="d-flex justify-content-between align-items-center">
-                    <div>
+                    <div className="ms-2">
                       <img
-                        src={amyRobsonImage}
+                        src={data && data.comments[0].user.image.png}
                         alt="avatar"
                         style={{ width: "35px" }}
                         className="me-2"
                       />
-                      <span className="fw-bold">Amy Robson</span> 1 month ago
+                      <span className="fw-bold">
+                        {commentsData && (
+                          <span className="fw-bold">
+                            {commentsData.comments[0].user.username}
+                          </span>
+                        )}
+                      </span>
+                      {commentsData && (
+                        <span className="ms-1">
+                          {commentsData.comments[0].createdAt}
+                        </span>
+                      )}
                     </div>
                     <div
                       style={{
                         color: "#5357b6",
                         position: "absolute",
-                        top: isMobile ? "184px" : "17px",
+                        top: isMobile ? "200px" : "17px",
                         right: "39px",
                       }}
                     >
@@ -86,12 +111,11 @@ function CommentsComponent() {
                       <span className="fw-bold">Reply</span>
                     </div>
                   </div>
-                  <div>
+                  <div className="mt-2 ms-2">
                     <p>
-                      Impressive! Though it seems the drag feature could be
-                      improved. But overall it looks incredible. You've nailed
-                      the design and the responsivness at various breakpoints
-                      works really well
+                      {commentsData && (
+                        <span>{commentsData.comments[0].content}</span>
+                      )}
                     </p>
                   </div>
                 </div>
@@ -101,6 +125,31 @@ function CommentsComponent() {
         </div>
       </div>
     </div>
+  );
+}
+
+function isValidData(data) {
+  return (
+    data &&
+    data.currentUser &&
+    data.currentUser.image &&
+    data.currentUser.image.png &&
+    data.currentUser.image.webp &&
+    data.currentUser.username &&
+    Array.isArray(data.comments) &&
+    data.comments.every(
+      (comment) =>
+        comment.id &&
+        comment.content &&
+        comment.createdAt &&
+        comment.score &&
+        comment.user &&
+        comment.user.image &&
+        comment.user.image.png &&
+        comment.user.image.webp &&
+        comment.user.username &&
+        Array.isArray(comment.replies)
+    )
   );
 }
 
