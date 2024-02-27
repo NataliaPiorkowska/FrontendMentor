@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./new-comment.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import data from "../../assets/data.json";
+import data from "../../../assets/data.json";
 
 function NewCommentComponent() {
   const [isMobile, setIsMobile] = useState(false);
@@ -15,6 +15,19 @@ function NewCommentComponent() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  const addComment = () => {
+    const today = new Date();
+    const user=data.currentUser;
+    const areaComment = document.getElementById("commentText")
+    const uuid = crypto.randomUUID()
+    console.log(today, user, areaComment.value,uuid)
+    data.comments.push({id:uuid,content:areaComment.value,createdAt:today,score:0,user:user,replies:[]})
+    console.log(data)
+    areaComment.value="";
+
+  };
+
 
   console.log(data);
   return (
@@ -50,17 +63,19 @@ function NewCommentComponent() {
                   </div>
                 </div>
                 <div className="d-flex justify-content-between align-items-center flex-column">
-                  <button
+                  <button 
                     type="button"
                     className="btn btn-primary"
                     style={{
                       backgroundColor: "#5357b6",
                       borderColor: "#5357b6",
                     }}
+                    onClick={addComment}
                   >
                     SEND
                   </button>
                 </div>
+                <div><button onClick={() => handleToUpdate('someVar')}>Push me</button></div>
               </div>
             </div>
           </div>
