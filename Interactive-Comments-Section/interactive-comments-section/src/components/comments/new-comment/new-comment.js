@@ -28,6 +28,24 @@ function NewCommentComponent() {
 
   };
 
+  const addScore = (event, commentId) => {
+    const updatedData = { ...data };
+    const commentToUpdate = updatedData.comments.find(comment => comment.id === commentId);
+    if (commentToUpdate) {
+      commentToUpdate.score += 1;
+      setCommentsData(updatedData);
+    }
+  };
+
+  const subtractScore = (event, commentId) => {
+    const updatedData = { ...data };
+    const commentToUpdate = updatedData.comments.find(comment => comment.id === commentId);
+    if (commentToUpdate&&commentToUpdate.score>0) {
+      commentToUpdate.score -= 1;
+      setCommentsData(updatedData);
+    }
+  };
+
 
   console.log(data);
   return (
@@ -75,7 +93,6 @@ function NewCommentComponent() {
                     SEND
                   </button>
                 </div>
-                <div><button onClick={() => handleToUpdate('someVar')}>Push me</button></div>
               </div>
             </div>
           </div>

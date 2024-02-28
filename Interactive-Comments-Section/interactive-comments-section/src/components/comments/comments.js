@@ -6,6 +6,15 @@ import data from "../../assets/data.json";
 
 function CommentsComponent() {
   const [isMobile, setIsMobile] = useState(false);
+  //const [commentsData, setCommentsData] = useState(data);
+  const [storedData, setStoredData] = useState(() => {
+    const stored = localStorage.getItem("myData");
+    return stored ? JSON.parse(stored) : data;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("myData", JSON.stringify(storedData));
+  }, [storedData]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -16,11 +25,47 @@ function CommentsComponent() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const addScore = (event, commentId) => {
+    const updatedData = { ...storedData };
+    const commentToUpdate = updatedData.comments.find(
+      (comment) => comment.id === commentId
+    );
+    const replyToUpdate = updatedData.comments.find((comment) =>
+      comment.replies.find((reply) => reply.id === commentId)
+    );
+    if (commentToUpdate) {
+      commentToUpdate.score += 1;
+      setStoredData(updatedData);
+    }
+    if (replyToUpdate) {
+      replyToUpdate.replies.find((reply) => reply.id === commentId).score += 1;
+      setStoredData(updatedData);
+    }
+  };
+
+  const subtractScore = (event, commentId) => {
+    const updatedData = { ...storedData };
+    const commentToUpdate = updatedData.comments.find(
+      (comment) => comment.id === commentId
+    );
+    const replyToUpdate = updatedData.comments.find((comment) =>
+      comment.replies.find((reply) => reply.id === commentId)
+    );
+    if (commentToUpdate) {
+      commentToUpdate.score -= 1;
+      setStoredData(updatedData);
+    }
+    if (replyToUpdate) {
+      replyToUpdate.replies.find((reply) => reply.id === commentId).score -= 1;
+      setStoredData(updatedData);
+    }
+  };
+
   return (
     <div className="container">
       <div className="row">
         <div className="col-xs-12 col-sm-8 col-md-10 col-lg-14">
-          {data.comments.map((comment) => (
+          {storedData.comments.map((comment) => (
             <div className="card mb-4 border-0" key={comment.id}>
               <div className="card-body" style={{ position: "relative" }}>
                 <div
@@ -32,6 +77,7 @@ function CommentsComponent() {
                       type="button"
                       className="btn btn-outline-secondary d-flex align-items-center"
                       style={{ height: "30px" }}
+                      onClick={(event) => addScore(event, comment.id)}
                     >
                       <svg
                         width="10"
@@ -54,6 +100,7 @@ function CommentsComponent() {
                       type="button"
                       className="btn btn-outline-secondary d-flex flex-column-reverse"
                       style={{ height: "30px" }}
+                      onClick={(event) => subtractScore(event, comment.id)}
                     >
                       <svg
                         width="10"
@@ -130,6 +177,7 @@ function CommentsComponent() {
                               type="button"
                               className="btn btn-outline-secondary d-flex align-items-center"
                               style={{ height: "30px" }}
+                              onClick={(event) => addScore(event, reply.id)}
                             >
                               <svg
                                 width="10"
@@ -152,6 +200,7 @@ function CommentsComponent() {
                               type="button"
                               className="btn btn-outline-secondary d-flex flex-column-reverse"
                               style={{ height: "30px" }}
+                              onClick={(event) => subtractScore(event, reply.id)}
                             >
                               <svg
                                 width="10"
