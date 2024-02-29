@@ -6,6 +6,15 @@ import data from "../../../assets/data.json";
 
 function NewCommentComponent() {
   const [isMobile, setIsMobile] = useState(false);
+  const [storedData, setStoredData] = useState(() => {
+    const stored = localStorage.getItem('myData');
+    return stored ? JSON.parse(stored) : null;
+  });
+
+  useEffect(() => {
+    // Tutaj możesz wykonać operacje na danych z local storage
+    console.log(storedData);
+  }, [storedData]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -17,37 +26,26 @@ function NewCommentComponent() {
   }, []);
 
   const addComment = () => {
+    console.log("Starting addComment function...");
     const today = new Date();
-    const user=data.currentUser;
-    const areaComment = document.getElementById("commentText")
-    const uuid = crypto.randomUUID()
-    console.log(today, user, areaComment.value,uuid)
-    data.comments.push({id:uuid,content:areaComment.value,createdAt:today,score:0,user:user,replies:[]})
-    console.log(data)
-    areaComment.value="";
-
-  };
-
-  const addScore = (event, commentId) => {
-    const updatedData = { ...data };
-    const commentToUpdate = updatedData.comments.find(comment => comment.id === commentId);
-    if (commentToUpdate) {
-      commentToUpdate.score += 1;
-      setCommentsData(updatedData);
+    const user = data.currentUser;
+    const areaComment = document.getElementById("commentText");
+    const uuid = crypto.randomUUID();
+    console.log(today, user, areaComment.value, uuid);
+  
+    const updatedData = { ...storedData };
+    updatedData.comments.push({ id: uuid, content: areaComment.value, createdAt: today, score: 0, user: user, replies: [] });
+    console.log("Updated data:", updatedData);
+  
+    setStoredData(updatedData);
+    areaComment.value = "";
+    if (storedData !== null) {
+      localStorage.setItem('myData', JSON.stringify(updatedData));
     }
+    window.location.reload()
   };
+  
 
-  const subtractScore = (event, commentId) => {
-    const updatedData = { ...data };
-    const commentToUpdate = updatedData.comments.find(comment => comment.id === commentId);
-    if (commentToUpdate&&commentToUpdate.score>0) {
-      commentToUpdate.score -= 1;
-      setCommentsData(updatedData);
-    }
-  };
-
-
-  console.log(data);
   return (
     <div className="container">
       <div className="row">
