@@ -25,6 +25,40 @@ function CommentsComponent() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  useEffect(() => {
+    console.log("Dane w localStorage:", storedData);
+    storedData.comments.forEach((element) => {  
+      var newTextDatesDiffrences=getNewTextDatesDiffrences(element.createdAt)
+      element.createdAt = newTextDatesDiffrences;
+    });
+  }, [storedData]);
+
+  function getNewTextDatesDiffrences(createdAt){
+    const currentDate = new Date();
+    var commentsDates = new Date(createdAt);
+      const timeDifferenceInMilliseconds = currentDate - commentsDates;
+      const minutesDifference = Math.floor(
+        timeDifferenceInMilliseconds / (1000 * 60)
+      );
+      const hoursDifference = Math.floor(
+        timeDifferenceInMilliseconds / (1000 * 60 * 60)
+      );
+      const daysDifference = Math.floor(
+        timeDifferenceInMilliseconds / (1000 * 60 * 60 * 24)
+      );
+      if (minutesDifference > 0 && minutesDifference <= 59) {
+        var newTextDatesDiffrences = minutesDifference + " minutes ago";
+      } else if (hoursDifference > 0 && hoursDifference <= 24) {
+        var newTextDatesDiffrences = hoursDifference + " hours ago";
+      } else if (daysDifference > 0) {
+        var newTextDatesDiffrences = daysDifference + " days ago";
+      } else {
+        var newTextDatesDiffrences = "a few seconds ago";
+      }
+      return newTextDatesDiffrences;
+  }
+
+
   const addScore = (event, commentId) => {
     const updatedData = { ...storedData };
     const commentToUpdate = updatedData.comments.find(
@@ -130,7 +164,7 @@ function CommentsComponent() {
                         </span>
                         {data.currentUser.username == comment.user.username && (
                           <span
-                            className="badge rounded-pillms-1"
+                            className="badge rounded-pill ms-1"
                             style={{ backgroundColor: "#5357b6" }}
                           >
                             You
@@ -141,17 +175,19 @@ function CommentsComponent() {
                           <span className="ms-1">{comment.createdAt}</span>
                         )}
                       </div>
-                      <div
-                        style={{
-                          color: "#5357b6",
-                          position: "absolute",
-                          top: isMobile ? "186px" : "17px",
-                          right: "39px",
-                        }}
-                      >
-                        <i className="bi bi-reply-fill "></i>
-                        <span className="fw-bold">Reply</span>
-                      </div>
+                      {data.currentUser.username != comment.user.username && (
+                        <div
+                          style={{
+                            color: "#5357b6",
+                            position: "absolute",
+                            top: isMobile ? "186px" : "17px",
+                            right: "39px",
+                          }}
+                        >
+                          <i className="bi bi-reply-fill "></i>
+                          <span className="fw-bold">Reply</span>
+                        </div>
+                      )}
                     </div>
                     <div className="mt-2 ms-2">
                       <p>{data && <span>{comment.content}</span>}</p>
@@ -200,7 +236,9 @@ function CommentsComponent() {
                               type="button"
                               className="btn btn-outline-secondary d-flex flex-column-reverse"
                               style={{ height: "30px" }}
-                              onClick={(event) => subtractScore(event, reply.id)}
+                              onClick={(event) =>
+                                subtractScore(event, reply.id)
+                              }
                             >
                               <svg
                                 width="10"
@@ -246,18 +284,22 @@ function CommentsComponent() {
                                   </span>
                                 )}
                               </div>
-                              <div
-                                style={{
-                                  color: "#5357b6",
-                                  position: "absolute",
-                                  top: isMobile ? "186px" : "17px",
-                                  right: "39px",
-                                }}
-                              >
-                                <i className="bi bi-reply-fill "></i>
-                                <span className="fw-bold">Reply</span>
-                              </div>
+                              {data.currentUser.username !=
+                                reply.user.username && (
+                                <div
+                                  style={{
+                                    color: "#5357b6",
+                                    position: "absolute",
+                                    top: isMobile ? "186px" : "17px",
+                                    right: "39px",
+                                  }}
+                                >
+                                  <i className="bi bi-reply-fill "></i>
+                                  <span className="fw-bold">Reply</span>
+                                </div>
+                              )}
                             </div>
+
                             <div className="mt-2 ms-2">
                               <p>{data && <span>{reply.content}</span>}</p>
                             </div>
