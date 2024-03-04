@@ -7,7 +7,7 @@ import data from "../../../assets/data.json";
 function NewCommentComponent() {
   const [isMobile, setIsMobile] = useState(false);
   const [storedData, setStoredData] = useState(() => {
-    const stored = localStorage.getItem('myData');
+    const stored = localStorage.getItem("myData");
     return stored ? JSON.parse(stored) : null;
   });
 
@@ -26,25 +26,26 @@ function NewCommentComponent() {
   }, []);
 
   const addComment = () => {
-    console.log("Starting addComment function...");
     const today = new Date();
     const user = data.currentUser;
     const areaComment = document.getElementById("commentText");
     const uuid = crypto.randomUUID();
-    console.log(today, user, areaComment.value, uuid);
-  
     const updatedData = { ...storedData };
-    updatedData.comments.push({ id: uuid, content: areaComment.value, createdAt: today, score: 0, user: user, replies: [] });
-    console.log("Updated data:", updatedData);
-  
+    updatedData.comments.push({
+      id: uuid,
+      content: areaComment.value,
+      createdAt: today,
+      score: 0,
+      user: user,
+      replies: [],
+    });
     setStoredData(updatedData);
     areaComment.value = "";
     if (storedData !== null) {
-      localStorage.setItem('myData', JSON.stringify(updatedData));
+      localStorage.setItem("myData", JSON.stringify(updatedData));
     }
-    window.location.reload()
+    window.location.reload();
   };
-  
 
   return (
     <div className="container">
@@ -79,7 +80,7 @@ function NewCommentComponent() {
                   </div>
                 </div>
                 <div className="d-flex justify-content-between align-items-center flex-column">
-                  <button 
+                  <button
                     type="button"
                     className="btn btn-primary"
                     style={{

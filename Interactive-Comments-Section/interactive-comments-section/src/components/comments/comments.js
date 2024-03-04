@@ -20,44 +20,42 @@ function CommentsComponent() {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 576);
     };
-    handleResize();
     window.addEventListener("resize", handleResize);
+    handleResize();
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
-    console.log("Dane w localStorage:", storedData);
-    storedData.comments.forEach((element) => {  
-      var newTextDatesDiffrences=getNewTextDatesDiffrences(element.createdAt)
+    storedData.comments.forEach((element) => {
+      var newTextDatesDiffrences = getNewTextDatesDiffrences(element.createdAt);
       element.createdAt = newTextDatesDiffrences;
     });
   }, [storedData]);
 
-  function getNewTextDatesDiffrences(createdAt){
+  function getNewTextDatesDiffrences(createdAt) {
     const currentDate = new Date();
     var commentsDates = new Date(createdAt);
-      const timeDifferenceInMilliseconds = currentDate - commentsDates;
-      const minutesDifference = Math.floor(
-        timeDifferenceInMilliseconds / (1000 * 60)
-      );
-      const hoursDifference = Math.floor(
-        timeDifferenceInMilliseconds / (1000 * 60 * 60)
-      );
-      const daysDifference = Math.floor(
-        timeDifferenceInMilliseconds / (1000 * 60 * 60 * 24)
-      );
-      if (minutesDifference > 0 && minutesDifference <= 59) {
-        var newTextDatesDiffrences = minutesDifference + " minutes ago";
-      } else if (hoursDifference > 0 && hoursDifference <= 24) {
-        var newTextDatesDiffrences = hoursDifference + " hours ago";
-      } else if (daysDifference > 0) {
-        var newTextDatesDiffrences = daysDifference + " days ago";
-      } else {
-        var newTextDatesDiffrences = "a few seconds ago";
-      }
-      return newTextDatesDiffrences;
+    const timeDifferenceInMilliseconds = currentDate - commentsDates;
+    const minutesDifference = Math.floor(
+      timeDifferenceInMilliseconds / (1000 * 60)
+    );
+    const hoursDifference = Math.floor(
+      timeDifferenceInMilliseconds / (1000 * 60 * 60)
+    );
+    const daysDifference = Math.floor(
+      timeDifferenceInMilliseconds / (1000 * 60 * 60 * 24)
+    );
+    if (minutesDifference > 0 && minutesDifference <= 59) {
+      var newTextDatesDiffrences = minutesDifference + " minutes ago";
+    } else if (hoursDifference > 0 && hoursDifference <= 24) {
+      var newTextDatesDiffrences = hoursDifference + " hours ago";
+    } else if (daysDifference > 0) {
+      var newTextDatesDiffrences = daysDifference + " days ago";
+    } else {
+      var newTextDatesDiffrences = "a few seconds ago";
+    }
+    return newTextDatesDiffrences;
   }
-
 
   const addScore = (event, commentId) => {
     const updatedData = { ...storedData };
@@ -95,9 +93,33 @@ function CommentsComponent() {
     }
   };
 
+  const deleteComments = (event, commentId) => {
+    const updatedData = { ...storedData };
+    let commentToDelete = updatedData.comments.find(
+      (comment) => comment.id === commentId
+    );
+    if (!commentToDelete) {
+      updatedData.comments.forEach((comment) => {
+        const replyToDelete = comment.replies.find(
+          (reply) => reply.id === commentId
+        );
+        if (replyToDelete) {
+          comment.replies = comment.replies.filter(
+            (reply) => reply.id !== commentId
+          );
+        }
+      });
+    } else {
+      updatedData.comments = updatedData.comments.filter(
+        (comment) => comment.id !== commentId
+      );
+    }
+    setStoredData(updatedData);
+  };
+
   return (
     <div className="container">
-      <div className="row">
+      <div className="row" style={{ width: isMobile ? "100%" : "150%" }}>
         <div className="col-xs-12 col-sm-8 col-md-10 col-lg-14">
           {storedData.comments.map((comment) => (
             <div className="card mb-4 border-0" key={comment.id}>
@@ -187,6 +209,35 @@ function CommentsComponent() {
                           <i className="bi bi-reply-fill "></i>
                           <span className="fw-bold">Reply</span>
                         </div>
+                      )}
+                      {data.currentUser.username == comment.user.username && (
+                        <>
+                          <div
+                            style={{
+                              color: "#ed6368",
+                              position: "absolute",
+                              top: isMobile ? "186px" : "17px",
+                              right: "106px",
+                            }}
+                            onClick={(event) =>
+                              deleteComments(event, comment.id)
+                            }
+                          >
+                            <i className="bi bi-trash3-fill"></i>
+                            <span className="fw-bold">Delete</span>
+                          </div>
+                          <div
+                            style={{
+                              color: "#5357b6",
+                              position: "absolute",
+                              top: isMobile ? "186px" : "17px",
+                              right: "39px",
+                            }}
+                          >
+                            <i className="bi bi-pencil-fill"></i>
+                            <span className="fw-bold">Edit</span>
+                          </div>
+                        </>
                       )}
                     </div>
                     <div className="mt-2 ms-2">
@@ -297,6 +348,36 @@ function CommentsComponent() {
                                   <i className="bi bi-reply-fill "></i>
                                   <span className="fw-bold">Reply</span>
                                 </div>
+                              )}
+                              {data.currentUser.username ==
+                                reply.user.username && (
+                                <>
+                                  <div
+                                    style={{
+                                      color: "#ed6368",
+                                      position: "absolute",
+                                      top: isMobile ? "186px" : "17px",
+                                      right: "106px",
+                                    }}
+                                    onClick={(event) =>
+                                      deleteComments(event, reply.id)
+                                    }
+                                  >
+                                    <i className="bi bi-trash3-fill"></i>
+                                    <span className="fw-bold">Delete</span>
+                                  </div>
+                                  <div
+                                    style={{
+                                      color: "#5357b6",
+                                      position: "absolute",
+                                      top: isMobile ? "186px" : "17px",
+                                      right: "39px",
+                                    }}
+                                  >
+                                    <i className="bi bi-pencil-fill"></i>
+                                    <span className="fw-bold">Edit</span>
+                                  </div>
+                                </>
                               )}
                             </div>
 
