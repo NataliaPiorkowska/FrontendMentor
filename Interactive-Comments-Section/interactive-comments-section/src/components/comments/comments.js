@@ -202,8 +202,10 @@ function CommentsComponent() {
                           style={{
                             color: "#5357b6",
                             position: "absolute",
-                            top: isMobile ? "186px" : "17px",
+                            top: isMobile ? "84%" : "28px",
+                            transform: "translateY(-16%)",
                             right: "39px",
+                            cursor:"pointer"
                           }}
                         >
                           <i className="bi bi-reply-fill "></i>
@@ -216,8 +218,10 @@ function CommentsComponent() {
                             style={{
                               color: "#ed6368",
                               position: "absolute",
-                              top: isMobile ? "186px" : "17px",
+                              top: isMobile ? "78%" : "28px",
+                              transform: "translateY(-23%)",
                               right: "106px",
+                              cursor:"pointer"
                             }}
                             onClick={(event) =>
                               deleteComments(event, comment.id)
@@ -230,8 +234,10 @@ function CommentsComponent() {
                             style={{
                               color: "#5357b6",
                               position: "absolute",
-                              top: isMobile ? "186px" : "17px",
+                              top: isMobile ? "78%" : "28px",
+                              transform: "translateY(-23%)",
                               right: "39px",
+                              cursor:"pointer"
                             }}
                           >
                             <i className="bi bi-pencil-fill"></i>
@@ -249,7 +255,15 @@ function CommentsComponent() {
 
               {comment.replies &&
                 comment.replies.map((reply) => (
-                  <div className="ms-4 mb-3">
+                  <div
+                    className="ms-4"
+                    style={{
+                      boxShadow: "-15px 8px 0px 16px #f5f6fa",
+                      backgroundColor: "#f5f6fa",
+                      padding: "0px",
+                    }}
+                  >
+                    <div className="dark-line"></div>
                     <div className="card border-0" key={reply.id}>
                       <div
                         className="card-body"
@@ -341,8 +355,10 @@ function CommentsComponent() {
                                   style={{
                                     color: "#5357b6",
                                     position: "absolute",
-                                    top: isMobile ? "186px" : "17px",
+                                    top: isMobile ? "84%" : "28px",
+                                    transform: "translateY(-16%)",
                                     right: "39px",
+                                    cursor:"pointer"
                                   }}
                                 >
                                   <i className="bi bi-reply-fill "></i>
@@ -356,8 +372,10 @@ function CommentsComponent() {
                                     style={{
                                       color: "#ed6368",
                                       position: "absolute",
-                                      top: isMobile ? "186px" : "17px",
+                                      top: "78%",
+                                      transform: "translateY(-23%)",
                                       right: "106px",
+                                      cursor:"pointer"
                                     }}
                                     onClick={(event) =>
                                       deleteComments(event, reply.id)
@@ -370,8 +388,9 @@ function CommentsComponent() {
                                     style={{
                                       color: "#5357b6",
                                       position: "absolute",
-                                      top: isMobile ? "186px" : "17px",
+                                      top: isMobile ? "186px" : "28px",
                                       right: "39px",
+                                      cursor:"pointer"
                                     }}
                                   >
                                     <i className="bi bi-pencil-fill"></i>
