@@ -3,3 +3,13 @@
 .container-sm {
   max-width: 610px !important;
 }
+
+.dark-line {
+  position: absolute;
+  top: 0px;
+  left: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: #b3b5ba; 
+  content: ''; 
+}

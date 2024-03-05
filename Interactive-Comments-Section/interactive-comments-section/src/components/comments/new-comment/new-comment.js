@@ -12,8 +12,6 @@ function NewCommentComponent() {
   });
 
   useEffect(() => {
-    // Tutaj możesz wykonać operacje na danych z local storage
-    console.log(storedData);
   }, [storedData]);
 
   useEffect(() => {
@@ -29,6 +27,11 @@ function NewCommentComponent() {
     const today = new Date();
     const user = data.currentUser;
     const areaComment = document.getElementById("commentText");
+  
+    if (!areaComment.value.trim()) {
+      alert("Please enter a comment.");
+      return;
+    }
     const uuid = crypto.randomUUID();
     const updatedData = { ...storedData };
     updatedData.comments.push({
@@ -49,7 +52,7 @@ function NewCommentComponent() {
 
   return (
     <div className="container">
-      <div className="row">
+      <div className="row" style={{ width: isMobile ? "100%" : "150%" }}>
         <div className="col-xs-12 col-sm-8 col-md-10 col-lg-14">
           <div className="card">
             <div className="card-body">
