@@ -7,10 +7,18 @@ import data from "../../assets/data.json";
 function CommentsComponent() {
   const [isMobile, setIsMobile] = useState(false);
   //const [commentsData, setCommentsData] = useState(data);
+  //const [show, setShow] = useState(false);
   const [storedData, setStoredData] = useState(() => {
     const stored = localStorage.getItem("myData");
     return stored ? JSON.parse(stored) : data;
   });
+  const [replyVisibility, setReplyVisibility] = useState({}); 
+  const toggleReplyVisibility = (commentId) => {
+    setReplyVisibility((prevState) => ({
+      ...prevState,
+      [commentId]: !prevState[commentId],
+    }));
+  };
 
   useEffect(() => {
     localStorage.setItem("myData", JSON.stringify(storedData));
@@ -205,8 +213,9 @@ function CommentsComponent() {
                             top: isMobile ? "84%" : "28px",
                             transform: "translateY(-16%)",
                             right: "39px",
-                            cursor:"pointer"
+                            cursor: "pointer",
                           }}
+                          onClick={() => toggleReplyVisibility(comment.id)}
                         >
                           <i className="bi bi-reply-fill "></i>
                           <span className="fw-bold">Reply</span>
@@ -221,7 +230,7 @@ function CommentsComponent() {
                               top: isMobile ? "78%" : "28px",
                               transform: "translateY(-23%)",
                               right: "106px",
-                              cursor:"pointer"
+                              cursor: "pointer",
                             }}
                             onClick={(event) =>
                               deleteComments(event, comment.id)
@@ -237,7 +246,7 @@ function CommentsComponent() {
                               top: isMobile ? "78%" : "28px",
                               transform: "translateY(-23%)",
                               right: "39px",
-                              cursor:"pointer"
+                              cursor: "pointer",
                             }}
                           >
                             <i className="bi bi-pencil-fill"></i>
@@ -253,6 +262,10 @@ function CommentsComponent() {
                 </div>
               </div>
 
+              {replyVisibility[comment.id] && (
+                <Reply isVisible={replyVisibility[comment.id]} />
+              )}
+
               {comment.replies &&
                 comment.replies.map((reply) => (
                   <div
@@ -262,6 +275,7 @@ function CommentsComponent() {
                       backgroundColor: "#f5f6fa",
                       padding: "0px",
                     }}
+                    key={reply.id}
                   >
                     <div className="dark-line"></div>
                     <div className="card border-0" key={reply.id}>
@@ -358,8 +372,11 @@ function CommentsComponent() {
                                     top: isMobile ? "84%" : "28px",
                                     transform: "translateY(-16%)",
                                     right: "39px",
-                                    cursor:"pointer"
+                                    cursor: "pointer",
                                   }}
+                                  onClick={() =>
+                                    toggleReplyVisibility(reply.id)
+                                  }
                                 >
                                   <i className="bi bi-reply-fill "></i>
                                   <span className="fw-bold">Reply</span>
@@ -372,10 +389,10 @@ function CommentsComponent() {
                                     style={{
                                       color: "#ed6368",
                                       position: "absolute",
-                                      top: "78%",
-                                      transform: "translateY(-23%)",
+                                      top: isMobile ? "84%" : "28px",
+                                      transform: "translateY(-16%)",
                                       right: "106px",
-                                      cursor:"pointer"
+                                      cursor: "pointer",
                                     }}
                                     onClick={(event) =>
                                       deleteComments(event, reply.id)
@@ -390,7 +407,7 @@ function CommentsComponent() {
                                       position: "absolute",
                                       top: isMobile ? "186px" : "28px",
                                       right: "39px",
-                                      cursor:"pointer"
+                                      cursor: "pointer",
                                     }}
                                   >
                                     <i className="bi bi-pencil-fill"></i>
@@ -416,4 +433,61 @@ function CommentsComponent() {
     </div>
   );
 }
+
+function Reply({ commentId, addReply }) {
+  const [replyContent, setReplyContent] = useState("");
+  return (
+    <div className="ms-4 mb-1"            
+    style={{
+      boxShadow: "-15px 8px 0px 16px #f5f6fa",
+      backgroundColor: "#f5f6fa",
+      padding: "0px",
+    }}>
+      <div className="card">
+        <div className="card-body">
+          <div className="d-flex align-items-center flex-md-row">
+            <div className="d-flex flex-md-column ms-3">
+              <img
+                src={data && data.currentUser.image.png}
+                alt="avatar"
+                style={{ width: "35px" }}
+                className="me-2"
+              />
+            </div>
+            <div
+              className="flex-grow-1"
+              style={{ paddingLeft: "10px", paddingRight: "10px" }}
+            >
+              <div className="d-flex">
+                <div className="mt-2 ms-2 w-100">
+                  <div className="form-group m-0 f">
+                    <textarea
+                      className="form-control"
+                      placeholder="Leave a comment here"
+                      id="commentText"
+                      style={{ height: "100px", minWidth: "0" }}
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="d-flex justify-content-between align-items-center flex-column">
+              <button
+                type="button"
+                className="btn btn-primary"
+                style={{
+                  backgroundColor: "#5357b6",
+                  borderColor: "#5357b6",
+                }}
+              >
+                REPLY
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default CommentsComponent;
