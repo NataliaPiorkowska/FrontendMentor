@@ -92,7 +92,7 @@ function NewCommentComponent() {
                     }}
                     onClick={addComment}
                   >
-                    SEND
+                    Send
                   </button>
                 </div>
               </div>
