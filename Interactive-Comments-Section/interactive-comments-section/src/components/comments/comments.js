@@ -12,7 +12,7 @@ function CommentsComponent() {
     const stored = localStorage.getItem("myData");
     return stored ? JSON.parse(stored) : data;
   });
-  const [replyVisibility, setReplyVisibility] = useState({}); 
+  const [replyVisibility, setReplyVisibility] = useState({});
   const toggleReplyVisibility = (commentId) => {
     setReplyVisibility((prevState) => ({
       ...prevState,
@@ -202,7 +202,9 @@ function CommentsComponent() {
                         )}
 
                         {data && (
-                          <span className="ms-1">{comment.createdAt}</span>
+                          <span className="ms-1">
+                            {new Date(comment.createdAt).toLocaleString()}
+                          </span>
                         )}
                       </div>
                       {data.currentUser.username != comment.user.username && (
@@ -263,7 +265,11 @@ function CommentsComponent() {
               </div>
 
               {replyVisibility[comment.id] && (
-                <Reply isVisible={replyVisibility[comment.id]} />
+                <Reply
+                  commentId={comment.id}
+                  storedData={storedData}
+                  setStoredData={setStoredData}
+                />
               )}
 
               {comment.replies &&
@@ -359,7 +365,7 @@ function CommentsComponent() {
                                 )}
                                 {data && (
                                   <span className="ms-1">
-                                    {reply.createdAt}
+                                    {new Date(reply.createdAt).toLocaleString()}
                                   </span>
                                 )}
                               </div>
@@ -424,6 +430,14 @@ function CommentsComponent() {
                         </div>
                       </div>
                     </div>
+                    {replyVisibility[reply.id] && (
+                      <Reply
+                        commentId={comment.id}
+                        // upewnij się, że masz odpowiednią funkcję
+                        storedData={storedData}
+                        setStoredData={setStoredData}
+                      />
+                    )}
                   </div>
                 ))}
             </div>
@@ -434,15 +448,46 @@ function CommentsComponent() {
   );
 }
 
-function Reply({ commentId, addReply }) {
+function Reply({ commentId, storedData, setStoredData }) {
   const [replyContent, setReplyContent] = useState("");
+  const addComment = () => {
+    const today = new Date();
+    const user = data.currentUser;
+    const areaComment = document.getElementById("commentText");
+    if (!areaComment.value.trim()) {
+      alert("Please enter a comment.");
+      return;
+    }
+    const uuid = crypto.randomUUID();
+    const updatedData = { ...storedData };
+    updatedData.comments
+      .find((comment) => comment.id == commentId)
+      .replies.push({
+        id: uuid,
+        content: areaComment.value,
+        createdAt: today,
+        score: 0,
+        user: user,
+        replyingTo: "test",
+      });
+
+    setStoredData(updatedData);
+    areaComment.value = "";
+    if (storedData !== null) {
+      localStorage.setItem("myData", JSON.stringify(updatedData));
+    }
+    window.location.reload();
+  };
+
   return (
-    <div className="ms-4 mb-1"            
-    style={{
-      boxShadow: "-15px 8px 0px 16px #f5f6fa",
-      backgroundColor: "#f5f6fa",
-      padding: "0px",
-    }}>
+    <div
+      className="ms-4 mb-1"
+      style={{
+        boxShadow: "-15px 8px 0px 16px #f5f6fa",
+        backgroundColor: "#f5f6fa",
+        padding: "0px",
+      }}
+    >
       <div className="card">
         <div className="card-body">
           <div className="d-flex align-items-center flex-md-row">
@@ -479,8 +524,9 @@ function Reply({ commentId, addReply }) {
                   backgroundColor: "#5357b6",
                   borderColor: "#5357b6",
                 }}
+                onClick={addComment}
               >
-                REPLY
+                Reply
               </button>
             </div>
           </div>
