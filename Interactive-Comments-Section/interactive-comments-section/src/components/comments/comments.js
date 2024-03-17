@@ -6,18 +6,30 @@ import data from "../../assets/data.json";
 
 function CommentsComponent() {
   const [isMobile, setIsMobile] = useState(false);
-  //const [commentsData, setCommentsData] = useState(data);
-  //const [show, setShow] = useState(false);
   const [storedData, setStoredData] = useState(() => {
     const stored = localStorage.getItem("myData");
     return stored ? JSON.parse(stored) : data;
   });
   const [replyVisibility, setReplyVisibility] = useState({});
+  const [editVisibility, setEditVisibility] = useState({});
+  const [editedComment, setEditedComment] = useState({ id: null, content: "" });
+
   const toggleReplyVisibility = (commentId) => {
     setReplyVisibility((prevState) => ({
       ...prevState,
       [commentId]: !prevState[commentId],
     }));
+  };
+  const toggleEditVisibility = (commentId) => {
+    setEditedComment({ id: commentId, content: "" });
+    setEditVisibility((prevState) => ({
+      ...prevState,
+      [commentId]: !prevState[commentId],
+    }));
+  };
+
+  const handleEditChange = (event) => {
+    setEditedComment({ ...editedComment, content: event.target.value });
   };
 
   useEffect(() => {
@@ -122,7 +134,7 @@ function CommentsComponent() {
       <div className="row" style={{ width: isMobile ? "100%" : "150%" }}>
         <div className="col-xs-12 col-sm-8 col-md-10 col-lg-14">
           {storedData.comments.map((comment) => (
-            <div className="card mb-4 border-0" key={comment.id}>
+            <div className="card mb-2 border-0" key={comment.id}>
               <div className="card-body" style={{ position: "relative" }}>
                 <div
                   className="d-flex align-items-start align-items-md-center 
@@ -269,7 +281,7 @@ function CommentsComponent() {
               {comment.replies &&
                 comment.replies.map((reply) => (
                   <div
-                    className="ms-4"
+                    className="ms-4 mb-1"
                     style={{
                       boxShadow: "-15px 8px 0px 16px #f5f6fa",
                       backgroundColor: "#f5f6fa",
@@ -411,6 +423,9 @@ function CommentsComponent() {
                                       right: "39px",
                                       cursor: "pointer",
                                     }}
+                                    onClick={() =>
+                                      toggleEditVisibility(reply.id)
+                                    }
                                   >
                                     <i className="bi bi-pencil-fill"></i>
                                     <span className="fw-bold">Edit</span>
@@ -420,7 +435,34 @@ function CommentsComponent() {
                             </div>
 
                             <div className="mt-2 ms-2">
-                              <p>{data && <span>{reply.content}</span>}</p>
+                              {editVisibility[comment.id] ? (
+                                <div className="mt-2 ms-2 w-100">
+                                  <div className="form-group m-0 f">
+                                    <textarea
+                                      className="form-control"
+                                      placeholder="Edit your comment here"
+                                      value={editedComment.content}
+                                      onChange={handleEditChange}
+                                      style={{ height: "100px", minWidth: "0" }}
+                                    ></textarea>
+                                  </div>
+                                  <div className="d-flex justify-content-between align-items-center flex-column mt-2">
+                                    <button
+                                      type="button"
+                                      className="btn btn-primary"
+                                      onClick={saveEdit}
+                                      style={{
+                                        backgroundColor: "#5357b6",
+                                        borderColor: "#5357b6",
+                                      }}
+                                    >
+                                      Save
+                                    </button>
+                                  </div>
+                                </div>
+                              ) : (
+                                <p>{data && <span>{reply.content}</span>}</p>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -429,7 +471,13 @@ function CommentsComponent() {
                     {replyVisibility[reply.id] && (
                       <Reply
                         commentId={comment.id}
-                        // upewnij się, że masz odpowiednią funkcję
+                        storedData={storedData}
+                        setStoredData={setStoredData}
+                      />
+                    )}
+                    {editVisibility[reply.id] && (
+                      <Edit
+                        commentId={comment.id}
                         storedData={storedData}
                         setStoredData={setStoredData}
                       />
@@ -445,7 +493,7 @@ function CommentsComponent() {
 }
 
 function Reply({ commentId, storedData, setStoredData }) {
-  const [replyContent, setReplyContent] = useState("");
+  //const [replyContent, setReplyContent] = useState("");
   const addComment = () => {
     const today = new Date();
     const user = data.currentUser;
@@ -523,6 +571,91 @@ function Reply({ commentId, storedData, setStoredData }) {
                 onClick={addComment}
               >
                 Reply
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Edit({ commentId, storedData, setStoredData }) {
+  const editComment = () => {
+    const user = data.currentUser;
+    const areaComment = document.getElementById("commentText");
+    if (!areaComment.value.trim()) {
+      alert("Please enter a comment.");
+      return;
+    }
+    const updatedData = { ...storedData };
+    // updatedData.comments
+    //   .find((comment) => comment.id == commentId)
+    //   .replies.push({
+    //     id: uuid,
+    //     content: areaComment.value,
+    //     createdAt: today,
+    //     score: 0,
+    //     user: user,
+    //     replyingTo: "test",
+    //   });
+
+    // setStoredData(updatedData);
+    areaComment.value = "";
+    if (storedData !== null) {
+      localStorage.setItem("myData", JSON.stringify(updatedData));
+    }
+    window.location.reload();
+  };
+
+  return (
+    <div
+      className="ms-4 mb-1"
+      style={{
+        boxShadow: "-15px 8px 0px 16px #f5f6fa",
+        backgroundColor: "#f5f6fa",
+        padding: "0px",
+      }}
+    >
+      <div className="card">
+        <div className="card-body">
+          <div className="d-flex align-items-center flex-md-row">
+            <div className="d-flex flex-md-column ms-3">
+              <img
+                src={data && data.currentUser.image.png}
+                alt="avatar"
+                style={{ width: "35px" }}
+                className="me-2"
+              />
+            </div>
+            <div
+              className="flex-grow-1"
+              style={{ paddingLeft: "10px", paddingRight: "10px" }}
+            >
+              <div className="d-flex">
+                <div className="mt-2 ms-2 w-100">
+                  <div className="form-group m-0 f">
+                    <textarea
+                      className="form-control"
+                      placeholder="Leave a comment here"
+                      id="commentText"
+                      style={{ height: "100px", minWidth: "0" }}
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="d-flex justify-content-between align-items-center flex-column">
+              <button
+                type="button"
+                className="btn btn-primary"
+                style={{
+                  backgroundColor: "#5357b6",
+                  borderColor: "#5357b6",
+                }}
+                onClick={editComment}
+              >
+                Edit
               </button>
             </div>
           </div>
