@@ -28,10 +28,6 @@ function CommentsComponent() {
     }));
   };
 
-  const handleEditChange = (event) => {
-    setEditedComment({ ...editedComment, content: event.target.value });
-  };
-
   useEffect(() => {
     localStorage.setItem("myData", JSON.stringify(storedData));
   }, [storedData]);
@@ -290,6 +286,7 @@ function CommentsComponent() {
                     key={reply.id}
                   >
                     <div className="dark-line"></div>
+                    {!editVisibility[reply.id]&&(
                     <div className="card border-0" key={reply.id}>
                       <div
                         className="card-body"
@@ -433,41 +430,14 @@ function CommentsComponent() {
                                 </>
                               )}
                             </div>
-
                             <div className="mt-2 ms-2">
-                              {editVisibility[comment.id] ? (
-                                <div className="mt-2 ms-2 w-100">
-                                  <div className="form-group m-0 f">
-                                    <textarea
-                                      className="form-control"
-                                      placeholder="Edit your comment here"
-                                      value={editedComment.content}
-                                      onChange={handleEditChange}
-                                      style={{ height: "100px", minWidth: "0" }}
-                                    ></textarea>
-                                  </div>
-                                  <div className="d-flex justify-content-between align-items-center flex-column mt-2">
-                                    <button
-                                      type="button"
-                                      className="btn btn-primary"
-                                      onClick={saveEdit}
-                                      style={{
-                                        backgroundColor: "#5357b6",
-                                        borderColor: "#5357b6",
-                                      }}
-                                    >
-                                      Save
-                                    </button>
-                                  </div>
-                                </div>
-                              ) : (
                                 <p>{data && <span>{reply.content}</span>}</p>
-                              )}
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
+                    )}
                     {replyVisibility[reply.id] && (
                       <Reply
                         commentId={comment.id}
@@ -477,9 +447,10 @@ function CommentsComponent() {
                     )}
                     {editVisibility[reply.id] && (
                       <Edit
-                        commentId={comment.id}
+                        commentId={reply.id}
                         storedData={storedData}
                         setStoredData={setStoredData}
+                        commentContent={reply.content}
                       />
                     )}
                   </div>
@@ -493,7 +464,6 @@ function CommentsComponent() {
 }
 
 function Reply({ commentId, storedData, setStoredData }) {
-  //const [replyContent, setReplyContent] = useState("");
   const addComment = () => {
     const today = new Date();
     const user = data.currentUser;
@@ -580,7 +550,7 @@ function Reply({ commentId, storedData, setStoredData }) {
   );
 }
 
-function Edit({ commentId, storedData, setStoredData }) {
+function Edit({ commentId, storedData, setStoredData, commentContent }) {
   const editComment = () => {
     const user = data.currentUser;
     const areaComment = document.getElementById("commentText");
@@ -636,6 +606,7 @@ function Edit({ commentId, storedData, setStoredData }) {
                 <div className="mt-2 ms-2 w-100">
                   <div className="form-group m-0 f">
                     <textarea
+                      value={commentContent}
                       className="form-control"
                       placeholder="Leave a comment here"
                       id="commentText"
