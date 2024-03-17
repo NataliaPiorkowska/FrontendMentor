@@ -33,17 +33,9 @@ function CommentsComponent() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  useEffect(() => {
-    storedData.comments.forEach((element) => {
-      var newTextDatesDiffrences = getNewTextDatesDiffrences(element.createdAt);
-      element.createdAt = newTextDatesDiffrences;
-    });
-  }, [storedData]);
-
   function getNewTextDatesDiffrences(createdAt) {
     const currentDate = new Date();
-    var commentsDates = new Date(createdAt);
-    const timeDifferenceInMilliseconds = currentDate - commentsDates;
+    const timeDifferenceInMilliseconds = currentDate - createdAt;
     const minutesDifference = Math.floor(
       timeDifferenceInMilliseconds / (1000 * 60)
     );
@@ -203,7 +195,9 @@ function CommentsComponent() {
 
                         {data && (
                           <span className="ms-1">
-                            {new Date(comment.createdAt).toLocaleString()}
+                            {getNewTextDatesDiffrences(
+                              new Date(comment.createdAt)
+                            )}
                           </span>
                         )}
                       </div>
@@ -365,7 +359,9 @@ function CommentsComponent() {
                                 )}
                                 {data && (
                                   <span className="ms-1">
-                                    {new Date(reply.createdAt).toLocaleString()}
+                                    {getNewTextDatesDiffrences(
+                                      new Date(reply.createdAt)
+                                    )}
                                   </span>
                                 )}
                               </div>
@@ -375,7 +371,7 @@ function CommentsComponent() {
                                   style={{
                                     color: "#5357b6",
                                     position: "absolute",
-                                    top: isMobile ? "84%" : "28px",
+                                    top: isMobile ? "84%" : "24px",
                                     transform: "translateY(-16%)",
                                     right: "39px",
                                     cursor: "pointer",
@@ -411,7 +407,7 @@ function CommentsComponent() {
                                     style={{
                                       color: "#5357b6",
                                       position: "absolute",
-                                      top: isMobile ? "186px" : "28px",
+                                      top: isMobile ? "186px" : "24px",
                                       right: "39px",
                                       cursor: "pointer",
                                     }}
