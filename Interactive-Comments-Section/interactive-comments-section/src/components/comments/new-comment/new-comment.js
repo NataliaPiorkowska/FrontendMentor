@@ -11,12 +11,11 @@ function NewCommentComponent() {
     return stored ? JSON.parse(stored) : null;
   });
 
-  useEffect(() => {
-  }, [storedData]);
+  useEffect(() => {}, [storedData]);
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 576);
+      setIsMobile(window.innerWidth <= 527);
     };
     handleResize();
     window.addEventListener("resize", handleResize);
@@ -27,7 +26,7 @@ function NewCommentComponent() {
     const today = new Date();
     const user = data.currentUser;
     const areaComment = document.getElementById("commentText");
-  
+
     if (!areaComment.value.trim()) {
       alert("Please enter a comment.");
       return;
