@@ -1,5 +1,56 @@
-<div class="card">
+<div class="card mb-5">
   <div class="card-body">
-    <img src="../../../assets/images/photosnap.svg" />
+    <div class="row">
+      <div class="col-1 d-flex justify-content-center align-items-center">
+        <img src="{{ cardData.logo }}" class="img" />
+      </div>
+      <div class="col-5">
+        <div class="row">
+          <div class="d-flex">
+            <!-- justify-content-between -->
+            <p class="fw-bold" style="color: #4b9b9b">{{ cardData.company }}</p>
+            <div class="ms-5">
+              <span
+                class="badge rounded-pill me-1"
+                style="background-color: #4b9b9b"
+                *ngIf="cardData.new"
+                >NEW!</span
+              >
+              <span class="badge rounded-pill bg-dark" *ngIf="cardData.featured"
+                >FEATURED</span
+              >
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <p class="fw-bold">{{ cardData.position }}</p>
+        </div>
+        <div class="row">
+          <div class="d-flex fw-bold">
+            <p class="me-3" style="color: #7b8e8e">{{ cardData.postedAt }}</p>
+            <p class="me-3" style="color: #7b8e8e">{{ cardData.contract }}</p>
+            <p style="color: #7b8e8e">{{ cardData.location }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <button
+          class="btn me-1"
+          type="button"
+          *ngFor="let language of cardData.languages"
+          style="background-color: #effafa; color: #4b9b9b"
+        >
+          {{ language }}
+        </button>
+        <button
+          class="btn me-1"
+          type="button"
+          *ngFor="let tool of cardData.tools"
+          style="background-color: #effafa; color: #4b9b9b"
+        >
+          {{ tool }}
+        </button>
+      </div>
+    </div>
   </div>
 </div>
