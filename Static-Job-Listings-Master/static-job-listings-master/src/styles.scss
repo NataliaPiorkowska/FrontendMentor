@@ -1,3 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
 
+.headerMenu {
+  background-image: url("../src/assets/images/bg-header-desktop.svg");
+  height: 155px;
+  background-color: hsl(180, 29%, 50%);
+}
 
+.bodyBackgroung{
+  background-color:hsl(180deg 52.38% 95.88%) !important;
+}
