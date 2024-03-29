@@ -1,6 +1,9 @@
 <title>Frontend Mentor | Job Listings</title>
+<div class="container app-filter" *ngIf="filterComponent">
+  <app-filter (removeFilterEvent)="removeFilter($event)" [filterItems]="filterItems"></app-filter>
+</div>
 <div class="container">
-  <app-card [cardData]="cardData" *ngFor="let cardData of data"></app-card>
+  <app-card (newFilterEvent)="addFilter($event)" [cardData]="cardData" *ngFor="let cardData of data"></app-card>
 </div>
 <div class="attribution">
   Challenge by

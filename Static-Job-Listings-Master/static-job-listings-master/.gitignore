@@ -13,3 +13,5 @@
 .DS_Store
 node_modules
 cache/
+**/deps/*_metadata.json
+**/*_metadata.json
