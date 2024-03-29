@@ -1,13 +1,12 @@
 <div class="card mb-5">
   <div class="card-body">
     <div class="row">
-      <div class="col-1 d-flex justify-content-center align-items-center">
+      <div class="col-12 col-sm-1 d-flex justify-content-sm-start align-items-center">
         <img src="{{ cardData.logo }}" class="img" />
       </div>
-      <div class="col-5">
+      <div class="col-12 col-sm-5">
         <div class="row">
           <div class="d-flex">
-            <!-- justify-content-between -->
             <p class="fw-bold" style="color: #4b9b9b">{{ cardData.company }}</p>
             <div class="ms-5">
               <span
@@ -33,20 +32,22 @@
           </div>
         </div>
       </div>
-      <div class="col-6">
+      <div class="col-12 col-sm-6 d-flex flex-wrap  align-content-center align-items-center">
         <button
-          class="btn me-1"
+          class="btn me-3"
           type="button"
           *ngFor="let language of cardData.languages"
           style="background-color: #effafa; color: #4b9b9b"
+          (click)="setFilter(language)"
         >
           {{ language }}
         </button>
         <button
-          class="btn me-1"
+          class="btn me-3"
           type="button"
           *ngFor="let tool of cardData.tools"
           style="background-color: #effafa; color: #4b9b9b"
+          (click)="setFilter(tool)"
         >
           {{ tool }}
         </button>
@@ -54,3 +55,4 @@
     </div>
   </div>
 </div>
+
