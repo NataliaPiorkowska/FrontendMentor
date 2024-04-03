@@ -1,10 +1,9 @@
-<div class="card mb-5">
+<div class="card">
   <div class="card-body">
     <div class="row">
-      <div class="col-12 col-sm-1 d-flex">
-        <div class="d-flex ">
+      <div class="col-12 d-flex flex-wrap  align-content-center align-items-center">
           <button
-            class="btn me-3"
+            class="btn me-3 mt-2"
             type="button"
             *ngFor="let filterItem of filterItems"
             style="background-color: #effafa; color: #4b9b9b"
@@ -13,7 +12,6 @@
             {{ filterItem }}
             <i class="bi bi-x-lg"></i>
           </button>
-        </div>
       </div>
     </div>
   </div>

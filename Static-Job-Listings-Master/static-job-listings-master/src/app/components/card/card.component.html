@@ -1,7 +1,9 @@
 <div class="card mb-5">
   <div class="card-body">
     <div class="row">
-      <div class="col-12 col-sm-1 d-flex justify-content-sm-start align-items-center">
+      <div
+        class="col-12 col-sm-1 d-flex justify-content-sm-start align-items-center"
+      >
         <img src="{{ cardData.logo }}" class="img" />
       </div>
       <div class="col-12 col-sm-5">
@@ -22,7 +24,15 @@
           </div>
         </div>
         <div class="row">
-          <p class="fw-bold">{{ cardData.position }}</p>
+          <p
+            class="fw-bold"
+            [ngStyle]="{ color: isHovered ? '#4b9b9b' : 'black' }"
+            (mouseenter)="isHovered = true"
+            (mouseleave)="isHovered = false"
+            style="cursor: pointer;"
+          >
+            {{ cardData.position }}
+          </p>
         </div>
         <div class="row">
           <div class="d-flex fw-bold">
@@ -32,7 +42,9 @@
           </div>
         </div>
       </div>
-      <div class="col-12 col-sm-6 d-flex flex-wrap  align-content-center align-items-center">
+      <div
+        class="col-12 col-sm-6 d-flex flex-wrap align-content-center align-items-center"
+      >
         <button
           class="btn me-3"
           type="button"
@@ -55,4 +67,3 @@
     </div>
   </div>
 </div>
-
