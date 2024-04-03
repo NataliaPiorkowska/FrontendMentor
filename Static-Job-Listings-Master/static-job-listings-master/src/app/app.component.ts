@@ -28,7 +28,12 @@ export class AppComponent {
 
   addFilter(newFilter: string) {
     this.filterComponent = true;
-    this.filterItems.push(newFilter);
+    const index = this.filterItems.indexOf(newFilter);
+    if (index > -1) {
+      this.removeFilter(newFilter);
+    } else {
+      this.filterItems.push(newFilter);
+    }
   }
 
   removeFilter(filterItem: string) {
