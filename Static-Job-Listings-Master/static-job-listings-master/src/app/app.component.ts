@@ -4,6 +4,7 @@ import { JobsService } from './services/jobs.service';
 import { NgFor, NgIf } from '@angular/common';
 import { CardComponent } from './components/card/card.component';
 import { FilterComponent } from './components/filter/filter/filter.component';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -19,12 +20,26 @@ export class AppComponent {
   filterComponent: boolean = false;
   filterItems: string[] = [];
 
-  constructor(private jobService: JobsService) {}
+  constructor(
+    private jobService: JobsService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.jobService.getData().subscribe((jobs) => {
       this.data = jobs;
       this.dataBackup = jobs;
+    });
+
+    this.route.queryParams.subscribe((params) => {
+      const filters = params['filters'];
+      if (filters) {
+        this.filterItems = filters
+          .split('&')
+          .map((param: string) => param.split('=')[1]);
+        this.findJob();
+      }
     });
   }
 
@@ -35,6 +50,7 @@ export class AppComponent {
     } else {
       this.filterItems.push(newFilter);
       this.findJob();
+      this.updateRoute();
     }
   }
 
@@ -43,6 +59,7 @@ export class AppComponent {
     if (index > -1) {
       this.filterItems.splice(index, 1);
       this.findJob();
+      this.updateRoute();
     }
     if (this.filterItems.length == 0) {
       this.filterComponent = false;
@@ -55,6 +72,14 @@ export class AppComponent {
         (filterItem) =>
           job.tools.includes(filterItem) || job.languages.includes(filterItem)
       );
+    });
+  }
+  updateRoute() {
+    const queryParams = { filters: this.filterItems };
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams,
+      queryParamsHandling: 'merge',
     });
   }
 }
